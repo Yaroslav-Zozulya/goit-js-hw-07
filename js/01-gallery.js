@@ -25,22 +25,28 @@ galleryRef.addEventListener('click', openOriginalImage); //Слушатель к
 function openOriginalImage(event) {
     event.preventDefault(); // отменяем дефолтное поведение ссылок
 
-    const instance = basicLightbox.create(
-        // открываем модальное окно
-        `<img src="${event.target.dataset.source}" width="800" height="600">`,
-        {
-            onClose: instance =>
-                document.removeEventListener('keydown', onEscClick), // снимаем слушатель клавиатуры при закрытие модалки
-        },
-    );
-    instance.show();
+    // проверяем что б юзер не попал в
+    // тот несчастный пиксель между слайдами
+    if (event.target.classList.contains('gallery__image')) {
+        const instance = basicLightbox.create(
+            // открываем модальное окно
+            `<img src="${event.target.dataset.source}" width="800" height="600">`,
+            {
+                onClose: instance =>
+                    document.removeEventListener('keydown', onEscClick), // снимаем слушатель клавиатуры при закрытие модалки
+            },
+        );
+        instance.show();
 
-    document.addEventListener('keydown', onEscClick); // добавляем слушатель клавиатуры
-    function onEscClick(event) {
-        // проверяем как кнопка нажата
-        if (event.code === 'Escape') {
-            // если ESC то закрываем модалку
-            instance.close();
+        document.addEventListener('keydown', onEscClick); // добавляем слушатель клавиатуры
+        function onEscClick(event) {
+            // проверяем как кнопка нажата
+            if (event.code === 'Escape') {
+                // если ESC то закрываем модалку
+                instance.close();
+            }
         }
+    } else {
+        alert('Да попади ты мышкой уже! :)');
     }
 }
